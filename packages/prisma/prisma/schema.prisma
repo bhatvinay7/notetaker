@@ -8,28 +8,43 @@ generator client {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String @id @default(uuid()) @db.Uuid
   email     String   @unique
-  password String    
+  password String?    
   name      String?
   role      Role     @default(USER)
   refreshToken String? @default("") 
   createdAt DateTime @default(now())
-  notes     Note[]
+  session   NoteSession[]
 @@index([id], name: "note_user_id_idx")
 }
 
+model NoteSession{
+id        String @id @default(uuid()) @db.Uuid
+createdAt DateTime @default(now())
+topic    String?    @db.VarChar(255)
+note Note[]
+userId  String?
+user    User?    @relation(fields: [userId], references: [id])
+deleated  Boolean  @default(false)
+@@index([id], name: "note_session_id_idx")
+@@index([topic], name: "note_session_topic_idx")
+}
+
 model Note {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String @id @default(uuid()) @db.Uuid
   title     String   @db.VarChar(255)
   summary   String   
-  userId  Int?
-  user    User?    @relation(fields: [userId], references: [id])
+  sessionId  String?
+  note    NoteSession?    @relation(fields: [sessionId], references: [id])
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  deleated  Boolean  @default(false)
 @@index([title], name: "note_title_id_idx")
 @@index([id], name: "note_id_idx")
+
 }
+
 enum Role {
   USER
   ADMIN
