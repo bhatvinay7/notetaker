@@ -11,6 +11,14 @@ picture?: z.string().optional()
 isVerified: z.boolean()
 })
 
+
+async function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+
 const createNote = async(c: Context){
   try{
     const user: z.infer<typeof userSchema>=c.get("user")
@@ -46,11 +54,16 @@ if (!result.success) {
       noteId: session.Id
     }
   })
-  await connectedUsers.get(user.userId!).writeSSE({ data: message.summary, event: 'connection-established' });
-
+  
   try {
+    await connectedUsers.get(user.userId!).writeSSE({ data: message.summary, event: 'connection-established' });
     while (true) {
-      await connectedUsers.get(user.userId!).sleep(1000 * 60);
+      await sleep(1000 * 60);
+      const stream = connectedUsers.get(user.userId!);
+      if (!stream) {
+      console.log(`User ${user.userId} disconnected`);
+      break;
+    }
     }
   } catch (error) {
     connectedUsers.delete(userId);
