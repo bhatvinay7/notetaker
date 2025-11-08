@@ -1,1 +1,1 @@
-DB_URL='postgresql://neondb_owner:npg_vmQ5yUtzAa2n@ep-damp-hill-a16cr73f-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
+export * from './api.types.js'

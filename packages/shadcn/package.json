@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
-  "build":"tsc -b"
-   },
-"types": "./dist/index.d.ts",
+    "build": "tsc -b"
+  },
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -15,11 +15,14 @@
     }
   },
   "devDependencies": {
- "@repo/typescript-config": "workspace:*",
- "tsc-node": "^0.0.3",
-  "typescript": "^5.9.3"
-},
+    "@repo/typescript-config": "workspace:*",
+    "tsc-node": "^0.0.3",
+    "typescript": "^5.9.3"
+  },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "tailwindcss": "^4.1.17"
+  }
 }

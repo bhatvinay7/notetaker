@@ -1,102 +1,93 @@
-import Image, { type ImageProps } from "next/image";
-import { Button } from "@repo/ui/button";
-import styles from "./page.module.css";
-
-type Props = Omit<ImageProps, "src"> & {
-  srcLight: string;
-  srcDark: string;
-};
-
-const ThemeImage = (props: Props) => {
-  const { srcLight, srcDark, ...rest } = props;
-
+'use client'
+import React, { useState } from 'react'
+import { Pencil,ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+import useToggleDarkMode from '../hook/use-toggle-darkMode'
+import SlideBar from '../components/ui/sidebar'
+import Header from '../components/ui/header'
+import { useSelector } from 'react-redux';
+import {
+  sideBarState,
+} from "../lib/redux/featuresSlice/slideBarSlice";
+export default function LandingPage() {
+  const slideState= useSelector(sideBarState)
+  const value =useToggleDarkMode()
   return (
-    <>
-      <Image {...rest} src={srcLight} className="imgLight" />
-      <Image {...rest} src={srcDark} className="imgDark" />
-    </>
-  );
-};
+    <div
+      className={`relative h-screen select-none  transition-colors duration-500 ${
+        value ? "dark bg-gray-800 text-white" : "bg-gray-50 text-gray-900"
+      }`}
+    >
+      <div className={` ${slideState ? "block":"hidden"} bg-white sm:hidden absolute z-45 inset-0 top-0 w-full h-full `}>
+        <SlideBar/>
+      </div>
+      {/* Background Gradients */}
+      <div className="hidden sm:block w-full">
+      <Header/>
 
-export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <ThemeImage
-          className={styles.logo}
-          srcLight="turborepo-dark.svg"
-          srcDark="turborepo-light.svg"
-          alt="Turborepo logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>apps/web/app/page.tsx</code>
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new/clone?demo-description=Learn+to+implement+a+monorepo+with+a+two+Next.js+sites+that+has+installed+three+local+packages.&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F4K8ZISWAzJ8X1504ca0zmC%2F0b21a1c6246add355e55816278ef54bc%2FBasic.png&demo-title=Monorepo+with+Turborepo&demo-url=https%3A%2F%2Fexamples-basic-web.vercel.sh%2F&from=templates&project-name=Monorepo+with+Turborepo&repository-name=monorepo-turborepo&repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fturborepo%2Ftree%2Fmain%2Fexamples%2Fbasic&root-directory=apps%2Fdocs&skippable-integrations=1&teamSlug=vercel&utm_source=create-turbo"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://turborepo.com/docs?utm_source"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+      </div>
+      {/* Hero Section (Animated) */}
+      <motion.main
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="relative flex flex-col lg:flex-row items-center justify-center px-4 sm:px-6 md:px-8 lg:px-20 top-16 sm:top-20 sm:py-14 md:py-16 lg:py-24 gap-10"
+      >
+        <div className="text-center lg:text-left max-w-xl space-y-3 sm:space-y-6">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight">
+            Capture your <span className="text-indigo-500">thoughts</span> effortlessly
+          </h1>
+          <p className={`text-base md:text-lg ${ value ? "text-gray-300" : "text-black"}`}>
+            Organize ideas, create sessions, and manage notes seamlessly — all in one elegant workspace.
+          </p>
+          <div className="flex justify-center lg:justify-start gap-4 pt-4">
+            <button className="flex items-center text-base sm:text-lg gap-2 p-1 sm:px-3 sm:py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-lg transition-all">
+              Start Writing <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
+            </button>
+            <button className="p-1 sm:px-3 sm:py-2 text-base sm:text-lg rounded-lg border text-white border-gray-400 dark:border-gray-800 bg-[hsl(140,2%,37%)] hover:bg-gray-100 dark:hover:bg-[hsl(129,49%,16%)] transition-all">
+              Learn More
+            </button>
+          </div>
         </div>
-        <Button appName="web" className={styles.secondary}>
-          Open alert
-        </Button>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com/templates?search=turborepo&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+
+        {/* Preview Card */}
+        <div
+          className={`relative ${
+            value ? "text-gray-900/60 border-white/20" : "bg-gray-100"
+          } mb-3 sm:mb-0 rounded-3xl border border-black/20 p-6 w-full max-w-md sm:max-w-sm `}
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://turborepo.com?utm_source=create-turbo"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to turborepo.com →
-        </a>
-      </footer>
+          <div className="flex justify-between mb-4">
+            <span className="font-semibold text-gray-700 font-serif dark:text-gray-500">
+              Session: Personal Notes
+            </span>
+            <Pencil className="w-5 h-5 text-indigo-500" />
+          </div>
+          <div className="space-y-3">
+            <div className="p-3 bg-gray-100 text-base hover:scale-105 transition dark:bg-gray-300 rounded-lg">
+              ✨ Improve UI for landing page
+            </div>
+            <div className="p-3 bg-gray-100 text-base hover:scale-105 transition dark:bg-gray-300 rounded-lg">
+              🧠 Plan note synchronization logic
+            </div>
+            <div className="p-3 bg-gray-100 text-base hover:scale-105 transition dark:bg-gray-300 rounded-lg">
+              📦 Add cloud backup integration
+            </div>
+          </div>
+          <button className="mt-6 w-full bg-indigo-600/60 hover:scale-105 text-white py-2 rounded-lg transition">
+            Save Note
+          </button>
+        </div>
+      </motion.main>
+
+      {/* Footer (Animated) */}
+      <motion.footer
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.2, delay: 0.3 }}
+        className="w-full text-center py-8 absolute mt-auto flex justify-center mx-auto text-gray-500 dark:text-gray-400"
+      >
+        © {new Date().getFullYear()} NoteTaker
+      </motion.footer>
     </div>
   );
 }
