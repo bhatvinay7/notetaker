@@ -1,21 +1,35 @@
 import jwt from "jsonwebtoken";
-import getUserdata from "../utils/getUserdata.js";
-import prisma from "prisma";
+import {Context} from 'hono'
+import getUserdata from "../utils/googleAuthData.js";
+import { setCookie } from 'hono/cookie';
+import prisma from 'prisma'
 const SECRET_KEY = process.env.secret_key!;
 const ACCESS_KEY = process.env.access_key!;
-const callbackHandler = async (c) => {
+const callbackHandler = async (c:Context) => {
   try {
-    const data = await getUserdata(c);
-    if (!data?.email) {
-      c.status(400);
-      return c.json({ message: "Invalid user data" });
+    const user = await getUserdata(c);
+    if (!user?.email) {
+      return c.json({ message: "Invalid user data" },400);
     }
-    let user: any;
-    const refreshToken = jwt.sign(
+    let new_user: any
+    new_user = await prisma.user.findFirst({
+     where:{
+     email: user.email
+     } });
+  if (!new_user) {
+  new_user = await prisma.user.create({
+    data: {
+      name: user.name,
+      email: user.email,
+      refreshToken: ""
+    },
+  });
+  }
+      const refreshToken = jwt.sign(
       {
         username: user.name!,
         email: user.email!,
-        userId: user.id,
+        userId: new_user.id!,
         picture: user.picture,
         isVerified: true,
       },
@@ -26,7 +40,7 @@ const callbackHandler = async (c) => {
       {
         username: user.name!,
         email: user.email!,
-        userId: user.id,
+        userId: new_user.id!,
         picture: user.picture,
         isVerified: true,
       },
@@ -34,30 +48,25 @@ const callbackHandler = async (c) => {
       { expiresIn: "7d" }
     );
 
-    user = await prisma.user.findFirst({ email: email });
-    if (!user) {
-      user = await prisma.User.create({
-        data: {
-          name: data.name,
-          email: data.email,
-          refreshToken: refreshToken
-        },
-      });
+  const updateUser=await prisma.user.update({
+    where:{
+      id:new_user.id!
+    },
+    data:{
+      refreshToken:refreshToken
     }
-
-    c.cookie("token", refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: "/",
-    });
-
-    res.redirect(`${process.env.NEXT_PUBLIC_FRONTEND_URL}`);
+  })  
+  setCookie(c,"token",refreshToken, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "None",
+  maxAge: 6*24*60*60,
+  path:"/"
+});
+  return c.redirect(`${process.env.NEXT_PUBLIC_FRONTEND_URL!}`);
   } catch (error: any) {
     console.error("OAuth Error:", error.message);
-    c.status(500);
-    return c.json({ message: "OAuth error", error: error.message });
+    return c.json({ message: "OAuth error", error: error.message },500);
   }
 };
 
