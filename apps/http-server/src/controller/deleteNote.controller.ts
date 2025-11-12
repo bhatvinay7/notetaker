@@ -1,33 +1,31 @@
 import { Context } from 'hono'
 import prisma from 'prisma'
 import * as z from 'zod'
-import { connectedUsers } from './llm_response_event.controller.js'
+import { userCredentials } from 'types'
+import { connectedUsers } from './makedNotes.js'
 const userSchema = z.object({
-    username: z.string().min(3)
-email: z.email()
-userId: z.string()
-picture?: z.string().optional() 
+    username: z.string().min(3),
+email: z.email(),
+userId: z.string(),
+picture: z.string(),
 isVerified: z.boolean()
 })
 
-const deleteNote = async(c: Context){
+const deleteNote = async(c: Context)=>{
     try{
-        const user: z.infer<typeof userSchema>=c.get("user")
+        const user: z.infer<typeof userSchema>=c.get("user") as userCredentials
 const result = userSchema.safeParse(user);
 if (!result.success) {
-    c.state(400)
-    return c.json({ message: "user is unauthenticated" })
+    return c.json({ message: "user is unauthenticated" },400)
 } else {
-    const { sessionId, noteId } = c.req.params();
+    const { sessionId, noteId } = c.req.param();
 
     if (!sessionId! || !noteId) {
-        c.status(400)
-        return c.json({ message: "session id or noteIdt is not provided" })
+        return c.json({ message: "session id or noteIdt is not provided" },400)
     }
-    const session = await prisma.noteSession.findFirst({ where: {id:sessionId,userId: user.userId } })
+    const session = await prisma.noteSession.findFirst({ where: {id:decodeURIComponent(sessionId),userId: decodeURIComponent(user.userId) } })
     if (!session) {
-        c.status(400)
-        return c.json({ message: "provided sessionId not belongs to this user" })
+        return c.json({ message: "provided sessionId not belongs to this user" },400)
     }
     try {
         const result = await prisma.note.update({
@@ -36,21 +34,18 @@ if (!result.success) {
                 sessionId: session.id,
             },
             data: {
-                delete: true
+                deleated: true
             },
         })
     }
     catch (error: any) {
-        c.status(400)
-        c.json({ message: "Error while deleting the note!" })
+        c.json({ message: "Error while deleting the note!" },400)
     }
 }
-c.status(200)
-return c.json({ message: "note is sucessfully deleated" })
+return c.json({ message: "note is sucessfully deleated" },200)
 }
     catch (error: any) {
-    c.status(500)
-    return c.json({ message: "Unexpected Error Occured" })
+    return c.json({ message: "Unexpected Error Occured" },500)
 }
 }
 
