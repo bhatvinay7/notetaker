@@ -5,6 +5,8 @@
   "main": "dist/index.js",
   "type":"module",
   "scripts": {
+    "prisma:generate": "pnpx prisma generate",
+    "prisma:migrate:dev": "pnpx prisma migrate dev",
     "build": "tsc -b"
   },
   "types": "./dist/index.d.ts",
