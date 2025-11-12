@@ -2,79 +2,75 @@ import { Context } from 'hono'
 import prisma from 'prisma'
 import * as z from 'zod'
 import llmCall from '../agent/agentCall.js'
-import { connectedUsers } from './llm_response_event.controller.js'
+import { connectedUsers } from './makedNotes.js'
+import { userCredentials } from 'types'
 const userSchema = z.object({
-  username: z.string().min(3)
-email: z.email()
-userId: z.string()
-picture?: z.string().optional() 
+  username: z.string().min(3),
+email: z.email(),
+userId: z.string(),
+picture: z.string(),
 isVerified: z.boolean()
 })
-
-
-async function sleep(ms) {
+ interface response {
+  title: string,
+  topic: string,
+  content: string,
+}
+async function sleep(ms:number) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }
 
-
-const createNote = async(c: Context){
+const createNote = async(c: Context)=>{
   try{
-    const user: z.infer<typeof userSchema>=c.get("user")
+    const user: z.infer<typeof userSchema>=c.get("user") as userCredentials
 const result = userSchema.safeParse(user);
-if (!result.success) {
-  c.state(400)
-  return c.json({ message: "user is unauthenticated" })
+if (!result?.success) {
+  return c.json({ message: "user is unauthenticated" },400)
 } else {
-  const sessionId = c.req.params("sessionId")
-  const body = await c.req.json();
-  if (!sessionId || !body.userPromt!) {
-    c.status(400)
-    return c.json({ message: "session id or input is not provided" })
+  const sessionId = decodeURIComponent(c.req.param("sessionId"))
+  const body:{userPromt:string} =await c.req.json()
+  const llmResponse:string= await llmCall(body.userPromt!)
+  const message:response=JSON.parse(llmResponse ? llmResponse: `{}`)
+  if(!message.title && !message.content && !message.topic){
+  return c.json({message:"Error occured"},500)
+}
+
+  if (!sessionId && !body.userPromt!) {
+  
+    return c.json({ message: "session id or input is not provided" },400)
   }
   const session = await prisma.noteSession.findFirst({ where: { id: sessionId, userId: user.userId } })
   if (!session) {
-    c.status(400)
-    return c.json({ message: "provided sessionId not belongs to this user" })
+    return c.json({ message: "provided sessionId not belongs to this user" },400)
   }
-  const message = await llmCall(body.userPromt!)
   if (!session.topic) {
     const newSession = await prisma.noteSession.update({
+      where:{
+        userId: user.userId,
+        id:session.id
+      },
       data: {
-        topic: message.topic,
-        userId: user.userId
+        topic: message.topic
       }
     })
   }
-  const newNote = await prisma.noteSession.create({
+  const newNote = await prisma.note.create({
     data: {
       title: message.title,
-      summary: message.summary,
-      noteId: session.Id
+      summary: message.content,
+      sessionId: session.id
     }
   })
-  
-  try {
-    await connectedUsers.get(user.userId!).writeSSE({ data: message.summary, event: 'connection-established' });
-    while (true) {
-      await sleep(1000 * 60);
-      const stream = connectedUsers.get(user.userId!);
-      if (!stream) {
-      console.log(`User ${user.userId} disconnected`);
-      break;
-    }
-    }
-  } catch (error) {
-    connectedUsers.delete(userId);
-
-  }
+  return  c.json(llmResponse,201)
 }
+
     }
     catch (error: any) {
-  c.status(500)
-  return c.json({ message: "Unexpected Error Occured" })
+      console.log(error)
+  return c.json({ message: "Unexpected Error Occured" },500)
 }
-}
+  }
 
 export default createNote
