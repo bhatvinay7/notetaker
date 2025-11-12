@@ -1,46 +1,43 @@
 import { Context } from 'hono'
 import prisma from 'prisma'
 import * as z from 'zod'
-import { connectedUsers } from './llm_response_event.controller.js'
+import { connectedUsers } from './makedNotes.js'
+import { userCredentials } from 'types'
 const userSchema = z.object({
-    username: z.string().min(3)
-email: z.email()
-userId: z.string()
-picture?: z.string().optional() 
+    username: z.string().min(3),
+email: z.email(),
+userId: z.string(),
+picture: z.string(),
 isVerified: z.boolean()
 })
 
-const saveNote = async(c: Context){
+const saveNote = async(c: Context)=>{
     try{
-        const user: z.infer<typeof userSchema>=c.get("user")
+        const user: z.infer<typeof userSchema>=c.get("user") as userCredentials
 const result = userSchema.safeParse(user);
 if (!result.success) {
-    c.state(400)
-    return c.json({ message: "user is unauthenticated" })
+    return c.json({ message: "user is unauthenticated" },400)
 } else {
-    const id = c.req.params("Id")
+    const id = c.req.param("Id")
     const body = await c.req.json();
     if (!id || !body.summary!) {
-        c.status(400)
-        return c.json({ message: "session id or input is not provided" })
+        return c.json({ message: "session id or input is not provided" },400)
     }
-    const session = await prisma.noteSession.findFirst({ where: { userId: user.userId } })
+    const session = await prisma.noteSession.findFirst({ where: { id:id,userId: user.userId } })
     if (!session) {
-        c.status(400)
-        return c.json({ message: "provided sessionId not belongs to this user" })
+        return c.json({ message: "provided sessionId not belongs to this user" },400)
     }
-    const newNote = await prisma.noteSession.create({
+    const newNote = await prisma.note.create({
         data: {
             title: body.title!,
             summary: body.summary!,
-            noteId: session.Id
+            sessionId: session.id
         }
     })
 }
     }
     catch (error: any) {
-    c.status(500)
-    return c.json({ message: "Unexpected Error Occured" })
+    return c.json({ message: "Unexpected Error Occured" },500)
 }
 }
 
