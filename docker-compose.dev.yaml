@@ -1,0 +1,74 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"  
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: note
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - note-network
+
+  fontend:
+    build:
+      context: .
+      dockerfile: apps/web/dockerfile.yaml
+    container_name: noteapp
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5" 
+    env_file:
+    - ./apps/web/.env    
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://postgres:password@postgres:5432/note
+      NEXT_PUBLIC_BACKEND_URL: http://localhost:3002
+    ports:
+      - "3000:3000"
+    networks:
+      - note-network
+
+  http-server:
+    build:
+      context: .
+      dockerfile: apps/http-server/dockerfile.yaml
+      args:
+        DATABASE_URL: "postgresql://postgres:password@postgres:5432/note"
+    container_name: http_server
+    deploy:
+      resources:
+        limits:
+          cpus: "0.3" 
+    restart: always
+    env_file:
+    - ./apps/http-server/.env    
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://postgres:password@postgres:5432/note
+    ports:
+      - "3002:3002"
+    command: >
+      sh -c "
+      pnpm --filter prisma run prisma:migrate:dev --name init " 
+    networks:
+      - note-network
+
+volumes:
+  pgdata:
+
+networks:
+  note-network:
+    driver: bridge
