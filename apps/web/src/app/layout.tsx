@@ -24,15 +24,16 @@ export default function RootLayout({
 }>) {
   return (  
   <html lang="en">
-  <body className={`${geistSans.variable} h-screen  ${geistMono.variable}`}>
+  <body className={`${geistSans.variable}   ${geistMono.variable}`}>
     <RedduxProvider>
-    <div className=" w-full min-h-screen  flex flex-col">
+    <div className=" w-full h-screen  flex flex-col">
 
       <div className=" w-full  sticky top-0 z-50 sm:hidden ">
         <Header/>  
       </div> 
 
-           {children}
+        {children}
+
     </div>  
       
     </RedduxProvider>

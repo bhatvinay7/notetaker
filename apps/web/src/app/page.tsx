@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Pencil,ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import useToggleDarkMode from '../hook/use-toggle-darkMode'
+import Link from 'next/link'
 import SlideBar from '../components/ui/sidebar'
 import Header from '../components/ui/header'
 import { useSelector } from 'react-redux';
@@ -41,9 +42,9 @@ export default function LandingPage() {
             Organize ideas, create sessions, and manage notes seamlessly — all in one elegant workspace.
           </p>
           <div className="flex justify-center lg:justify-start gap-4 pt-4">
-            <button className="flex items-center text-base sm:text-lg gap-2 p-1 sm:px-3 sm:py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-lg transition-all">
+            <Link href={'/dashboard'} className="flex items-center text-base sm:text-lg gap-2 p-1 sm:px-3 sm:py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-lg transition-all">
               Start Writing <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
-            </button>
+            </Link>
             <button className="p-1 sm:px-3 sm:py-2 text-base sm:text-lg rounded-lg border text-white border-gray-400 dark:border-gray-800 bg-[hsl(140,2%,37%)] hover:bg-gray-100 dark:hover:bg-[hsl(129,49%,16%)] transition-all">
               Learn More
             </button>
