@@ -1,8 +1,15 @@
+import 'hono'
 export interface userCredentials{
      username:string
      email:string
-     userId:number
+     userId:string
      picture:string
      isVerified:boolean
      token:string
+}
+
+declare module 'hono' {
+  interface ContextVariableMap {
+    user: userCredentials
+  }
 }
