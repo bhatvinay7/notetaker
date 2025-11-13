@@ -1,0 +1,31 @@
+FROM node:latest AS base
+RUN npm install -g pnpm turbo ts-node
+FROM base AS prunner
+ARG APP=web
+WORKDIR /app
+COPY . .
+RUN turbo prune --scope=${APP} --docker
+
+FROM base AS installer
+ARG APP=web
+ARG DATABASE_URL
+WORKDIR /app
+ENV DATABASE_URL=${DATABASE_URL}
+COPY --from=prunner /app/out/json/ .
+COPY --from=prunner /app/out/full/ .
+COPY package.json  ./
+COPY apps/${APP}/package.json ./apps/${APP}/
+COPY pnpm-lock.yaml ./
+COPY  pnpm-workspace.yaml ./
+COPY .npmrc ./
+COPY packages/ ./packages/
+RUN pnpm install --filter ${APP}
+RUN pnpm --filter types run build
+FROM base AS  runner
+ARG APP=web
+WORKDIR /app
+COPY --from=installer /app ./
+COPY --from=installer /app/node_modules ./node_modules
+WORKDIR /app/apps/${APP}
+EXPOSE 3000
+CMD ["pnpm","run","dev"]
