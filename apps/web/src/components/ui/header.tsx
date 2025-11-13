@@ -5,6 +5,7 @@ import {
   sideBarState,
   toggleSidebar,
 } from "../../lib/redux/featuresSlice/slideBarSlice";
+import Toggle_dark_mode from './toggle_dark_mode';
 import { useDispatch, useSelector } from "react-redux";
 import { toggleDarkMode } from "../../lib/redux/featuresSlice/toggleDarkModeSlice";
 import useToggleDarkMode from '../../hook/use-toggle-darkMode'
@@ -15,7 +16,7 @@ export default function Page() {
   const dispatch = useDispatch();
 
   return (
-    <header className="w-full sticky top-0 flex justify-between items-center bg-white dark:bg-blue-900 p-1.5 sm:px-8 sm:py-4 shadow-md">
+    <header className="w-full sticky top-0 flex z-45 justify-between items-center bg-white dark:bg-blue-900 p-1.5 sm:px-8 sm:py-4 shadow-md">
       
       
       <div className="flex items-center gap-3 p-3">
@@ -38,21 +39,8 @@ export default function Page() {
             NoteTaker
           </span>
         </div>
-      </div>
-
-    
-      <div className="flex items-center gap-4 pr-3">
-        <button
-          onClick={() => dispatch(toggleDarkMode(!toggleState))}
-          className={`${toggleState ? "bg-gray-300" : "bg-gray-400"} p-2 rounded-full hover:scale-110 transition-transform`}
-        >
-          {toggleState ? (
-            <Sun className="w-5 h-5 text-yellow-400" />
-          ) : (
-            <Moon className="w-5 h-5 text-gray-800" />
-          )}
-        </button>
-      </div>
+      </div>  
+      <Toggle_dark_mode/>
     </header>
   )
 }
