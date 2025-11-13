@@ -1,58 +1,57 @@
 import { Context } from 'hono'
 import prisma from 'prisma'
 import * as z from 'zod'
+import { userCredentials } from 'types'
 const userSchema = z.object({
-username: z.string().min(3)
-email: z.email()
-userId: z.string()
-picture?: z.string().optional() 
-isVerified: z.boolean()
+    username: z.string().min(3),
+    email: z.email(),
+    userId: z.string(),
+    picture: z.string(),
+    isVerified: z.boolean()
 })
-const searchNote = async (c: Context){
+const searchNote = async (c: Context) => {
     try {
-        const sessionId=c.req.params("sessionId")
-        const userInput=c.req.body
-        const session = await prisma.noteSession.findFirst({ where: { id:sessionId, userId: user.userId } })
-        if (!session) {
+        const user = c.get("user") as userCredentials
+        const userInput = c.req.query("search")
+        if (!user.userId || !userInput) {
             c.status(400)
-            c.json({ message: "session not exists!" })
+            c.json({ message: "session ID or input is not provided " })
         }
         const results = await prisma.noteSession.findMany({
             where: {
-                id: sessionId
+                userId: user.userId,
                 note: {
                     some: {
                         title: {
                             contains: userInput,
                             mode: 'insensitive',
                         },
-                        deleted: false,
+                        deleated: false,
                     },
                 },
             },
             take: 5,
-            include: {
-                note: true,
+            select: {
+                note: {
+                    where: {
+                        title: {
+                            contains: userInput,
+                            mode: 'insensitive',
+                        },
+                        deleated: false,
+                    },
+                    select: {
+                        id: true,
+                        title: true
+                    },
+                },
             },
         })
-        c.status(200)
-        return c.json(results)
+        return c.json(results?.[0]?.note ?? [], 200)
     }
     catch (error: any) {
-        c.status(500)
-        return c.json({ message: "Error occured!" })
+        return c.json({ message: "Error occured!" }, 500)
     }
 }
 
 export default searchNote
-
-
-
-
-
-
-
-
-
-
-

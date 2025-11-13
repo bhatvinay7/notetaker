@@ -22,12 +22,12 @@ app.use(
 )
 
 app.use('*', prettyJSON())
-app.route('/api', authRouter)
-app.route(middleware)
+app.route('/api/auth', authRouter)
+app.use('/api/*', middleware)
 app.route('/api', sessionRouter)
-app.route('/api', eventRouter)
+app.route('/api/event', eventRouter)
 app.route('/api', noteOperationRouter)
 
-const port = 3001
+const port = 3002
 console.log(`Server running on port ${port}`)
 serve({ fetch: app.fetch, port })
