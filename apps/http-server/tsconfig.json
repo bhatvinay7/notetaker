@@ -1,5 +1,6 @@
 {
   "extends": "@repo/typescript-config/base.json",
+  "ts-node": { "logError": true },
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
