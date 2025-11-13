@@ -1,0 +1,34 @@
+FROM node:22 as base
+RUN npm install -g pnpm turbo
+
+FROM base AS prunner
+ARG APP=http-server
+WORKDIR /app
+COPY . .
+RUN turbo prune --scope=$APP --docker
+FROM base AS installer
+ARG DATABASE_URL
+WORKDIR /app
+ARG APP=http-server
+ENV DATABASE_URL=${DATABASE_URL}
+COPY --from=prunner /app/out/json/ .
+COPY --from=prunner /app/out/full/ .
+COPY package.json ./
+COPY pnpm-lock.yaml ./
+COPY pnpm-workspace.yaml ./
+COPY packages ./packages
+COPY packages/prisma  ./packages/prisma 
+COPY apps/${APP}/package.json ./apps/${APP}/package.json
+RUN pnpm install --filter ${APP}
+RUN pnpm --filter types run build
+RUN pnpm --filter prisma run prisma:generate
+RUN pnpm --filter prisma run build
+FROM base AS builder
+ARG APP=http-server
+WORKDIR /app
+ENV APP=http-server
+COPY --from=installer /app ./
+RUN chmod -R 777 /app/packages/prisma
+WORKDIR /app/apps/${APP}
+EXPOSE 3002
+CMD ["node","src/index.ts"] 
