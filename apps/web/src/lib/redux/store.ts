@@ -1,13 +1,15 @@
 import { configureStore,EnhancedStore } from '@reduxjs/toolkit'
 import userReducer from './featuresSlice/userDetailSlice'
 import toggleBarReducer from './featuresSlice/slideBarSlice'
-import toggleDarkModeState from './featuresSlice/toggleDarkModeSlice'
+import toggleDarkModeReducer from './featuresSlice/toggleDarkModeSlice'
+import loaderReducer  from './featuresSlice/loaderSlice'
 export const makeStore= ():EnhancedStore => {
   return configureStore({
     reducer: {
         user: userReducer,
         sideBar:toggleBarReducer,
-        mode:toggleDarkModeState
+        mode:toggleDarkModeReducer,
+        loader: loaderReducer
     }
   })
 }

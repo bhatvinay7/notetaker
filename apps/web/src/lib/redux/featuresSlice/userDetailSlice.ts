@@ -7,7 +7,7 @@ interface UserState extends userCredentials{
 }
 const  initialState:UserState={
   username: '',
-  userId: null,
+  userId: '',
   picture: '',
   email: '',
   token: "",
@@ -15,7 +15,7 @@ const  initialState:UserState={
   state: 'pending',
 };
 
-export const getAdmin_Details = createAsyncThunk(
+export const fetch_user_Details = createAsyncThunk(
   'getAdmin_Details',
   async (_, thunkAPI) => {
     try {
@@ -34,10 +34,10 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getAdmin_Details.pending, (state) => {
+      .addCase( fetch_user_Details.pending, (state) => {
         state.state ='loading';
       })
-      .addCase(getAdmin_Details.fulfilled, (state, action)=> {
+      .addCase( fetch_user_Details.fulfilled, (state, action)=> {
       
         state.username = action.payload.username;
         state.email = action.payload.email;
@@ -48,7 +48,7 @@ const userSlice = createSlice({
         state.state = 'succeeded';
         }
       )
-      .addCase(getAdmin_Details.rejected, (state) => {
+      .addCase( fetch_user_Details.rejected, (state) => {
         state.state = 'failed';
       });
   },
