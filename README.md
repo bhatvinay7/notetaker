@@ -240,7 +240,7 @@ docker-compose down -v
 ### Step 1: Install Dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Step 2: Set Up Environment Variables
@@ -263,7 +263,7 @@ createdb notetaker
 
 ```bash
 cd apps/http-server
-npm run migrate
+pnpm run migrate
 ```
 
 ### Step 5: Start Development Servers
@@ -272,17 +272,17 @@ Run all apps in development mode:
 
 ```bash
 # From the root directory
-npm run dev
+pnpm run dev
 ```
 
 Or run specific apps:
 
 ```bash
 # Run only the web app
-npm run dev --filter=web
+pnpm run dev --filter=web
 
 # Run only the http-server
-npm run dev --filter=http-server
+pnpm run dev --filter=http-server
 ```
 
 ## 🔧 Configuration
@@ -327,14 +327,14 @@ npm run dev --filter=http-server
 Build all apps and packages:
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 Build specific app:
 
 ```bash
-npm run build --filter=web
-npm run build --filter=http-server
+pnpm run build --filter=web
+pnpm run build --filter=http-server
 ```
 
 ### Development
@@ -342,31 +342,31 @@ npm run build --filter=http-server
 Start all apps in dev mode:
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 Start specific app:
 
 ```bash
-npm run dev --filter=web
+pnpm run dev --filter=web
 ```
 
 ### Linting
 
 ```bash
-npm run lint
+pnpm run lint
 ```
 
 ### Format Code
 
 ```bash
-npm run format
+pnpm run format
 ```
 
 ### Type Checking
 
 ```bash
-npm run type-check
+pnpm run type-check
 ```
 
 ## 🏗️ Project Structure
