@@ -28,6 +28,7 @@ export default function NotePage() {
     const fetchNote = async () => {
       try {
         const response=await getNote(noteId)
+      
         setNote(response)
       } catch (err) {
         console.error('Error fetching note:', err)

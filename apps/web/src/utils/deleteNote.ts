@@ -1,5 +1,8 @@
 import axiosPublic from '../lib/axios'
-export async function deleteNote(sessionId:string,noteId:string):Promise<any>{
+interface  response{
+     message:string
+}
+export async function deleteNote(sessionId:string,noteId:string):Promise<response>{
      const response= await axiosPublic.post(`/api/deleteNote/${encodeURIComponent(sessionId)}/${encodeURIComponent(noteId)}`)
-     return response
+     return response.data as response
 }
