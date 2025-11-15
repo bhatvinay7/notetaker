@@ -18,8 +18,8 @@ export default function Dash_board_header({setShowSearch,setNewSession,buttonRef
             onClick={() => setShowSearch?.(true)}
             className=" flex items-center gap-2 px-4 py-2 rounded-2xl border  dark:border-white/15 bg-gray-200 hover:bg-gray-300 dark:bg-[hsl(210,3%,15%)] dark:hover:bg-[hsl(180,1%,14%)] 
             transition-all duration-200">
-            <Search className='w-5 h-5' />
-            <span className='text-base'>Search</span>
+            <Search className=' w-4 h-4 sm:w-5 sm:h-5' />
+            <span className='text-xs sm:text-base'>Search</span>
           </button>
           {/* New Chat Button */}
           <button
@@ -28,8 +28,8 @@ export default function Dash_board_header({setShowSearch,setNewSession,buttonRef
             className="flex items-center gap-1 py-1 px-2 sm:px-4 sm:py-2 rounded-2xl bg-blue-600/75 dark:bg-[hsl(210,3%,15%)] text-white 
             hover:bg-blue-700 dark:hover:bg-[hsl(210,3%,14%)] border dark:border-white/15  transition-all duration-200 
               shadow-md">
-            <Plus className='w-5 h-5' />
-            <span className='text-base'>New Chat</span>
+            <Plus className='w-4 h-4 sm:w-5 sm:h-5' />
+            <span className=' text-xs sm:text-base'>New Chat</span>
           </button>
         </div>
         <div className='w-fit h-fit hidden ml-auto relative top-2 sm:block'>
