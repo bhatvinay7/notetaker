@@ -17,11 +17,11 @@ export default function NotesPage() {
   }, [])
 
   return (
-    <div className=" relative z-30 h-[calc(100%-72px)] sm:h-screen overflow-y-auto flex flex-col items-center bg-gray-100 dark:bg-gray-900  ">
+    <div className=" relative z-30 h-[calc(100%-72px)] sm:h-screen overflow-y-auto flex flex-col items-center bg-gray-100 dark:bg-[hsl(210,3%,15%)]  ">
         <Dash_board_header
         isVisible={false}
         />
-      <h1 className="text-2xl px-2 self-start font-semibold text-gray-800 dark:text-white mb-6">
+      <h1 className=" text-xl md:text-2xl px-2 self-start ml-4 mt-4 font-semibold text-gray-800 dark:text-gray-300 mb-6">
         My Notes
       </h1>
 
@@ -30,10 +30,10 @@ export default function NotesPage() {
           <Link
             key={note.id}
             href={`/dashboard/u/${note.id}`}
-            className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow hover:shadow-lg transition-all p-6 flex flex-col items-center justify-center cursor-pointer"
+            className="group relative bg-white dark:bg-[hsl(210,3%,15%)] border dark:border-white/15 rounded-2xl shadow hover:shadow-lg transition-all p-6 flex flex-col items-center justify-center cursor-pointer"
           >
-            <NotebookPen className="w-8 h-8 self-start text-blue-500 mb-3 group-hover:scale-110 transition-transform" />
-            <h2 className="text-center text-base text-gray-700 line-clamp-1 dark:text-gray-200 font-medium">
+            <NotebookPen className="w-8 h-8 self-start text-black/75 dark:text-[hsl(204,2%,48%)] mb-3 group-hover:scale-110 transition-transform" />
+            <h2 className="text-center text-base text-gray-700 line-clamp-1 dark:text-gray-300 font-medium">
               {note.title}
             </h2>
             <span className="absolute bottom-2 right-3 text-xs text-gray-400">

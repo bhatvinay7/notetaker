@@ -16,20 +16,20 @@ export default function ChatInput({sendText}:{sendText: (text: string) => Promis
   }, [text])
   
   return (
-    <div className=" max-h-[10vh]  relative bottom-3 sm:bottom-8 dark:bg-gray-900  w-full flex items-center justify-center p-4 sm:p-3 md:px-4">
-      <div className=" w-full bg-gray-300 dark:bg-gray-700 md:w-3/5 flex border focus:ring-2 focus:ring-blue-400 rounded-md transition-all p-4 border-black/10 dark:border-white/20 items-center gap-2">
+    <div className=" max-h-[10vh]  sticky bottom-3 sm:bottom-8 dark:bg-[hsl(210,3%,15%)]  w-full flex items-center justify-center p-4 sm:p-3 md:px-4">
+      <div className=" w-full bg-gray-200 dark:bg-[hsl(210,3%,15%)] md:w-3/5 flex border focus:ring-2 focus:ring-black/15 dark:focus:ring-white/20 rounded-md transition-all p-4 border-black/10 dark:border-white/20 items-center gap-2">
         <textarea
           ref={textareaRef}
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Type your message..."
-          className="flex-1 resize-none p-3 rounded-sm bg-black/5 dark:bg-gray-700 text-gray-900 dark:text-white/60 focus:outline-none max-h-[120px] overflow-y-auto"
+          className="flex-1 resize-none p-3 rounded-sm bg-black/5 dark:bg-[hsla(210,2%,17%,0)] text-gray-900 dark:text-gray-200/50 focus:outline-none max-h-[120px] overflow-y-auto"
           rows={1}
         />
         <button
           aria-label='send'
           onClick={()=>{sendText(text.trim()),setText("")}}
-          className="p-3 rounded-full bg-blue-500 hover:bg-blue-600 transition-colors text-white"
+          className="p-3 rounded-full bg-gray-600 hover:bg-gray-600 transition-colors text-white"
         >
           <SendHorizonal className="w-5 h-5" />
         </button>

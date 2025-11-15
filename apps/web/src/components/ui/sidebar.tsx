@@ -13,11 +13,11 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className={ ` h-screen w-full border border-black/12  z-45 ${ value ? "bg-gray-800 sm:border-0 text-white/75":"bg-white/75 text-black " }  backdrop-blur-md  p-4 flex flex-col `}>
+    <div className={ ` h-screen w-full border border-black/12  z-45 ${ value ? "bg-[hsl(210,3%,15%)] sm:border-0 text-white/75":"bg-white/75 text-black " }  backdrop-blur-md  p-4 flex flex-col `}>
       {/* Logo / Header */}
         <div className=" w-fit justify-center gap-x-2 sm:flex hidden ">
-        <NotebookPen className="w-8 h-8  text-indigo-500" />
-        <h2 className=" text-2xl  font-bold text-indigo-600 text-center mb-8 tracking-tight ">NoteTaker</h2>
+        <NotebookPen className="w-8 h-8 dark:text-[hsl(210,2%,55%)] text-black/75" />
+        <h2 className=" text-2xl  font-bold text-black/75 dark:text-[hsl(210,2%,55%)] text-center mb-8 tracking-tight ">NoteTaker</h2>
         </div>  
 
         {/* Menu */}
@@ -31,7 +31,7 @@ export default function Sidebar() {
                 className={`flex items-center gap-3 w-full px-3 py-2 rounded-lg transition-all
                   ${
                     active === item.id
-                      ? 'bg-indigo-600 text-black/75 shadow-sm'
+                      ? 'dark:bg-gray-600 bg-black/20 text-black/75 shadow-sm'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/40'
                   }`}
               >

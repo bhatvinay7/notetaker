@@ -16,10 +16,10 @@ export default function LandingPage() {
   return (
     <div
       className={`relative h-screen select-none  transition-colors duration-500 ${
-        value ? "dark bg-gray-800 text-white" : "bg-gray-50 text-gray-900"
+        value ? " dark bg-[hsl(210,3%,15%)] text-white" : "bg-gray-50 text-gray-900 "
       }`}
     >
-      <div className={` ${slideState ? "block":"hidden"} bg-white sm:hidden absolute z-45 inset-0 top-0 w-full h-full `}>
+      <div className={` ${slideState ? "block":"hidden"} bg-white sm:hidden  absolute z-45 inset-0 top-0 w-full h-full `}>
         <SlideBar/>
       </div>
       {/* Background Gradients */}
@@ -36,16 +36,17 @@ export default function LandingPage() {
       >
         <div className="text-center lg:text-left max-w-xl space-y-3 sm:space-y-6">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight">
-            Capture your <span className="text-indigo-500">thoughts</span> effortlessly
+            <span className='dark:text-[#a2a8a2]'>Capture your</span> <span className="text-indigo-500 dark:text-[hsl(132,2%,56%)]">thoughts</span><br/>
+             <span className=' dark:text-[#a2a8a2] text-center '>effortlessly</span>
           </h1>
           <p className={`text-base md:text-lg ${ value ? "text-gray-300" : "text-black"}`}>
             Organize ideas, create sessions, and manage notes seamlessly — all in one elegant workspace.
           </p>
           <div className="flex justify-center lg:justify-start gap-4 pt-4">
-            <Link href={'/dashboard'} className="flex items-center text-base sm:text-lg gap-2 p-1 sm:px-3 sm:py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-lg transition-all">
-              Start Writing <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
+            <Link href={'/dashboard'} className="flex items-center text-base sm:text-lg gap-2 p-1 sm:px-3 sm:py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700  text-white font-semibold dark:bg-[hsl(140,2%,37%)] shadow-lg transition-all">
+              <span className='text-white'>Start Writing </span><ArrowRight className="w-3 h-3 sm:w-4 text-white sm:h-4" />
             </Link>
-            <button className="p-1 sm:px-3 sm:py-2 text-base sm:text-lg rounded-lg border text-white border-gray-400 dark:border-gray-800 bg-[hsl(140,2%,37%)] hover:bg-gray-100 dark:hover:bg-[hsl(129,49%,16%)] transition-all">
+            <button className="p-1 sm:px-3 sm:py-2 text-base sm:text-lg rounded-lg border text-white border-gray-400 dark:border-gray-800 bg-[hsl(140,2%,37%)] hover:bg-[hsl(210,2%,24%)] dark:hover:bg-[hsl(210,3%,15%)]  transition-all">
               Learn More
             </button>
           </div>

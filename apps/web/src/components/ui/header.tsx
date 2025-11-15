@@ -16,26 +16,26 @@ export default function Page() {
   const dispatch = useDispatch();
 
   return (
-    <header className="w-full sticky top-0 flex z-45 justify-between items-center bg-white dark:bg-blue-900 p-1.5 sm:px-8 sm:py-4 shadow-md">
+    <header className="w-full sticky top-0 flex z-45 justify-between items-center bg-gray-200 dark:bg-[hsl(210,3%,15%)] text-black/75 dark:text-[hsl(210,2%,55%)] p-1.5 sm:px-8 sm:py-4 shadow-md">
       
       
       <div className="flex items-center gap-3 p-3">
         
         <button
           onClick={() => dispatch(toggleSidebar(!value))}
-          className="bg-gray-300 dark:bg-gray-600 rounded-full p-2 block sm:hidden transition-transform hover:scale-110"
+          className="bg-gray-300 dark:bg-[hsl(210,3%,15%)] rounded-full p-2 block sm:hidden transition-transform hover:scale-110"
         >
           {!value ? (
-            <Menu className="w-5 h-5 text-black dark:text-white" />
+            <Menu className="w-5 h-5 text-black/75 dark:text-[hsl(210,2%,55%)]" />
           ) : (
-            <X className="w-5 h-5 text-black dark:text-white" />
+            <X className="w-5 h-5 text-black/75 dark:text-[hsl(210,2%,55%)]" />
           )}
         </button>
 
       
         <div className="flex items-center gap-2">
-          <NotebookPen className="w-6 h-6 text-indigo-500" />
-          <span className="text-xl font-bold whitespace-nowrap text-gray-800 dark:text-white">
+          <NotebookPen className="w-6 h-6 text-black/75 dark:text-[hsl(210,2%,55%)]" />
+          <span className="text-xl font-bold whitespace-nowrap text-black/75 dark:text-[hsl(210,2%,55%)]">
             NoteTaker
           </span>
         </div>

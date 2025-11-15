@@ -81,11 +81,10 @@ export default function Dashboard(){
  isVisible={true}
  />
 
-      <div className="relative w-full h-screen overflow-y-auto flex flex-col z-30 items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 
-                        dark:from-gray-900 dark:to-gray-950 transition-colors duration-300">
+      <div className="relative w-full h-screen overflow-y-auto flex flex-col z-30 items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[hsl(210,2%,17%)] dark:to-[hsl(210,3%,15%)] transition-colors duration-300">
         {/* Center message */}
         <main className="flex flex-col items-center justify-center  mt-6 sm:mt10 md:mt-12 xl::mt-16">
-          <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">
+          <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-300 mb-4">
             Start your new chat
           </h2>
           <p className="text-gray-600 dark:text-gray-400 text-center max-w-md">

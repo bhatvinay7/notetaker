@@ -24,8 +24,8 @@ async function sendText(text:string){
   }
 }
     return (
-    <div className=" flex h-[calc(100%-72px)] sm:h-screen flex-col relative z-30  overflow-y-auto space-y-5  bg-gray-200 dark:bg-gray-900">
-      <div className='w-full h-16 bg-gray-200 dark:bg-gray-800 p-3 hidden sm:block sticky top-0'>
+    <div className=" flex h-[calc(100%-72px)] sm:h-screen flex-col relative z-30  overflow-y-auto space-y-5  bg-gray-100 dark:bg-[hsl(210,3%,15%)]">
+      <div className='w-full h-16 border border-b-black/15 dark:border-b-white/20  bg-gray-100 dark:bg-[hsl(210,3%,15%)] p-3 hidden sm:block sticky top-0'>
        <div className='w-fit absolute right-2 '>
       <Toggle_dark_mode/>
        </div>
